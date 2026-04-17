@@ -1,39 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>creación de un círculo</title>
+    <title>Actividad Canvas</title>
 </head>
 <body>
-    <h2>Dibujo de un círculo</h2>
-    <h2>Realizado por Carlos Alfredo Salazar Alarcón</h2>
-    <!-- DEFINIR UN AREA DE DIBUJO CON EL ELEMENTO CANVAS -->
-    <canvas id="myCanvas" width="500" height="500" style="border:4px solid rgb(211, 79, 42);"></CAnvas>
-<!-- CODIGO  JAVASCRIPT -->
-    <script>
-        // OBTENER EL CONTEXTO DE DIBUJO DEL CANVAS
-        var canvas = document.getElementById("myCanvas");
-        //se obtiene el contexto de dibujo en 2D
-        var  ctx = canvas.getContext("2d");
-        // comenzar el trazado de una (circulo en este punto se inicia el dibujo)
-        ctx.beginPath();
 
-        // dibujar el arco para representar el circulo 
-                // las coordendas (x, y) ubique el centro.
-         // el radio del circulo es de 100 pixeles 
+<h2>CREAR UN CUADRADO Y UN TRIÁNGULO</h2>
 
-         ctx.arc(250, 250, 100,0, 2 * Math.PI);   
+<canvas id="myCanvas" width="500" height="500" style="border:4px solid rgb(190, 184, 19);"></canvas>
 
-        // definir el color del relleno del circulo
-        ctx.fillStyle = "yellow";
-        // rellenar el circulo con el color definido
-        ctx.fill();
-        
-        // dibujar el borde del circulo con un color diferente
-        ctx.stroke();
-    </script>
+<script>
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
 
+// Color y grosor de línea
+ctx.strokeStyle = "blue";
+ctx.lineWidth = 3;
+
+// 🔲 CUADRADO (arriba)
+ctx.beginPath();
+ctx.rect(180, 80, 140, 140); // posición centrada
+ctx.stroke();
+
+// ➖ LÍNEA DIVISORIA
+ctx.beginPath();
+ctx.moveTo(0, 250);
+ctx.lineTo(500, 250);
+ctx.stroke();
+
+// 🔺 TRIÁNGULO (abajo)
+ctx.beginPath();
+ctx.moveTo(250, 300);   // vértice superior
+ctx.lineTo(350, 420);   // derecha
+ctx.lineTo(150, 420);   // izquierda
+ctx.closePath();
+ctx.stroke();
+
+</script>
 
 </body>
 </html>
