@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Barras Dinámicas</title>
+</head>
+
+<body>
+
+<h2>📊 Gráfico de Barras Dinámico</h2>
+
+<canvas id="canvas" width="800" height="400" style="border:1px solid black;"></canvas>
+
+<script>
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+
+var valores = [];
+
+// inicializar
+for (let i = 0; i < 5; i++) {
+    valores.push(Math.random() * 90 + 10);
+}
+
+// dibujar
+function dibujar() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // ejes
+    ctx.beginPath();
+    ctx.moveTo(50, 0);
+    ctx.lineTo(50, canvas.height);
+    ctx.moveTo(0, canvas.height - 50);
+    ctx.lineTo(canvas.width, canvas.height - 50);
+    ctx.stroke();
+
+    // barras
+    let ancho = 80;
+    let espacio = 40;
+
+    for (let i = 0; i < valores.length; i++) {
+        let x = 100 + i * (ancho + espacio);
+        let y = canvas.height - 50 - valores[i];
+
+        ctx.fillStyle = "blue";
+        ctx.fillRect(x, y, ancho, valores[i]);
+    }
+}
+
+// actualizar cada segundo
+setInterval(function() {
+    for (let i = 0; i < valores.length; i++) {
+        valores[i] = Math.random() * 90 + 10;
+    }
+
+    dibujar();
+}, 1000);
+
+// primer dibujo
+dibujar();
+</script>
+
+</body>
+</html>

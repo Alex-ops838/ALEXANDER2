@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Puntos en Movimiento</title>
+</head>
+
+<body>
+
+<h2>📍 Puntos en Movimiento</h2>
+
+<canvas id="canvas" width="800" height="400" style="border:1px solid black;"></canvas>
+
+<script>
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
+
+var puntos = [];
+
+// crear puntos
+for (let i = 0; i < 5; i++) {
+    puntos.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height
+    });
+}
+
+function dibujar() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // ejes
+    ctx.beginPath();
+    ctx.moveTo(0, canvas.height / 2);
+    ctx.lineTo(canvas.width, canvas.height / 2);
+    ctx.moveTo(canvas.width / 2, 0);
+    ctx.lineTo(canvas.width / 2, canvas.height);
+    ctx.stroke();
+
+    // puntos
+    puntos.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+        ctx.fillStyle = "red";
+        ctx.fill();
+    });
+}
+
+// mover cada segundo
+setInterval(function() {
+    puntos.forEach(p => {
+        p.x = Math.random() * canvas.width;
+        p.y = Math.random() * canvas.height;
+    });
+
+    dibujar();
+}, 1000);
+
+// primer dibujo
+dibujar();
+</script>
+
+</body>
+</html>
