@@ -6,43 +6,123 @@
 <title>COMPUTACION GRAFICA</title>
 
 <link rel="stylesheet" href="css/estilos.css">
+
+<style>
+/* Contenedor principal */
+.contenedor {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Card principal */
+.card {
+    background: #1e1e2f;
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Subcards */
+.subcards {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.subcard {
+    background: #2e2e4d;
+    padding: 10px;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.subcard:hover {
+    background: #3e3e6d;
+}
+
+.subcard a {
+    text-decoration: none;
+    color: #00d4ff;
+    font-weight: bold;
+}
+
+/* Iconos */
+.icon {
+    font-size: 30px;
+}
+</style>
+
 </head>
 
 <body>
 
 <header>
     <h1>COMPUTACION GRAFICA</h1>
-    <p>Animaciones con Canvas </p>
+    <p>Animaciones con Canvas y 3D</p>
 </header>
 
 <div class="contenedor">
 
     <div class="card">
-        <div class="icon">📊</div>
-        <h2>Gráfico de Barras</h2>
-        <p>Visualiza datos dinámicos que cambian cada segundo.</p>
-        <a href="barras.html">Abrir</a>
+        <div class="icon">📘</div>
+        <h2>Actividad 4</h2>
+        <p>Ejercicios básicos con gráficos dinámicos.</p>
+
+        <div class="subcards">
+            <div class="subcard">
+                <p>Gráfico de Barras</p>
+                <a href="barras.html">Abrir</a>
+            </div>
+
+            <div class="subcard">
+                <p>Puntos en Movimiento</p>
+                <a href="puntos.html">Abrir</a>
+            </div>
+             <div class="subcard">
+                <p>Curva Coseno</p>
+                <a href="coseno.html">Abrir</a>
+            </div>
+        </div>
     </div>
 
     <div class="card">
-        <div class="icon">📍</div>
-        <h2>Puntos en Movimiento</h2>
-        <p>Simulación de puntos en un plano cartesiano dinámico.</p>
-        <a href="puntos.html">Abrir</a>
+        <div class="icon">📗</div>
+        <h2>Actividad 5</h2>
+        <p>Funciones matemáticas animadas.</p>
+        <div class="subcards">
+
+            <div class="subcard">
+                <p>traslacion
+                <a href="traslacion.html">Abrir</a>
+            </div>
+            
+            <div class="subcard">
+                <p>rotacion
+                <a href="rotacion.html">Abrir</a>
+            </div>
+            
+            <div class="subcard">
+                <p> interactivo </p>
+                <a href="interactivo.html">Abrir</a>
+            </div>
+        </div>
     </div>
 
+    <!--  ACTIVIDAD 3 -->
     <div class="card">
-        <div class="icon">📈</div>
-        <h2>Curva Coseno</h2>
-        <p>Representación animada de una función matemática.</p>
-        <a href="coseno.html">Abrir</a>
+        <div class="icon">🧊</div>
+        <h2>Actividad 3</h2>
+        <p>Traslación 3D</p>
+        <a href="traslacion.html">Abrir</a>
     </div>
+
+
 
 </div>
-
-<footer>
-    <p>© 2026 - Jhon Alexander | Ingeniería de Sistemas e informatica</p>
-</footer>
 
 <script src="jss/script.js"></script>
 
