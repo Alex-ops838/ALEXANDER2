@@ -3,128 +3,483 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>COMPUTACION GRAFICA</title>
-
+<title>Computación Gráfica</title>
 <link rel="stylesheet" href="css/estilos.css">
-
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-/* Contenedor principal */
-.contenedor {
+  :root {
+    --bg:      #07080a;
+    --bg2:     #0e1016;
+    --bg3:     #141720;
+    --line:    rgba(255,255,255,0.07);
+    --line2:   rgba(255,255,255,0.13);
+    --text:    #eceef2;
+    --muted:   #6b7280;
+    --dim:     #3a3f4a;
+    --a4:      #4f8ef7;
+    --a5:      #34d399;
+    --a6:      #f97316;
+    --a4-glow: rgba(79,142,247,0.18);
+    --a5-glow: rgba(52,211,153,0.15);
+    --a6-glow: rgba(249,115,22,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* grid bg */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* canvas particle bg */
+  #bg-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.35;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    z-index: 2;
+    padding: 72px 48px 56px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .header-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .header-eyebrow::before,
+  .header-eyebrow::after {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 1px;
+    background: var(--dim);
+  }
+
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(36px, 7vw, 80px);
+    line-height: 1;
+    letter-spacing: -2px;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  header h1 em {
+    font-style: normal;
+    color: var(--a4);
+  }
+
+  header p {
+    font-size: 16px;
+    color: var(--muted);
+    font-weight: 300;
+    letter-spacing: .3px;
+  }
+
+  /* ── MAIN GRID ── */
+  main {
+    position: relative;
+    z-index: 2;
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 60px 32px 80px;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    align-items: start;
+  }
 
-/* Card principal */
-.card {
-    background: #1e1e2f;
-    color: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0px 5px 15px rgba(0,0,0,0.3);
-}
+  /* ── CARD ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--line2);
+    border-radius: 20px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .3s, transform .3s;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity .4s;
+    pointer-events: none;
+  }
+  .card:hover { transform: translateY(-4px); }
 
-/* Subcards */
-.subcards {
-    margin-top: 15px;
+  .card.c4::before  { background: var(--a4-glow); }
+  .card.c5::before  { background: var(--a5-glow); }
+  .card.c6::before  { background: var(--a6-glow); }
+  .card.c4:hover { border-color: rgba(79,142,247,0.35); }
+  .card.c5:hover { border-color: rgba(52,211,153,0.35); }
+  .card.c6:hover { border-color: rgba(249,115,22,0.35);  }
+  .card:hover::before { opacity: 1; }
+
+  /* card header row */
+  .card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .card-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    border: 1px solid var(--line2);
+  }
+  .c4 .card-icon { background: rgba(79,142,247,0.1);  }
+  .c5 .card-icon { background: rgba(52,211,153,0.1);  }
+  .c6 .card-icon { background: rgba(249,115,22,0.1);  }
+
+  .card-title h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--text);
+  }
+  .card-badge {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .c4 .card-badge { background: rgba(79,142,247,0.15); color: var(--a4); }
+  .c5 .card-badge { background: rgba(52,211,153,0.15); color: var(--a5); }
+  .c6 .card-badge { background: rgba(249,115,22,0.15);  color: var(--a6); }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* ── SUBCARDS ── */
+  .subcards {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-}
+    gap: 8px;
+  }
 
-.subcard {
-    background: #2e2e4d;
-    padding: 10px;
-    border-radius: 10px;
-    transition: 0.3s;
-}
-
-.subcard:hover {
-    background: #3e3e6d;
-}
-
-.subcard a {
+  .subcard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--bg3);
+    border: 1px solid var(--line);
+    border-radius: 12px;
     text-decoration: none;
-    color: #00d4ff;
-    font-weight: bold;
-}
+    transition: background .2s, border-color .2s, transform .15s;
+    cursor: pointer;
+  }
+  .subcard:hover {
+    background: rgba(255,255,255,0.04);
+    transform: translateX(4px);
+  }
+  .c4 .subcard:hover { border-color: rgba(79,142,247,0.3); }
+  .c5 .subcard:hover { border-color: rgba(52,211,153,0.3); }
+  .c6 .subcard:hover { border-color: rgba(249,115,22,0.3);  }
 
-/* Iconos */
-.icon {
-    font-size: 30px;
-}
+  .subcard-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .subcard-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .c4 .subcard-dot { background: var(--a4); }
+  .c5 .subcard-dot { background: var(--a5); }
+  .c6 .subcard-dot { background: var(--a6); }
+
+  .subcard-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .subcard-arrow {
+    font-size: 13px;
+    color: var(--dim);
+    transition: color .2s, transform .2s;
+  }
+  .subcard:hover .subcard-arrow {
+    transform: translateX(3px);
+  }
+  .c4 .subcard:hover .subcard-arrow { color: var(--a4); }
+  .c5 .subcard:hover .subcard-arrow { color: var(--a5); }
+  .c6 .subcard:hover .subcard-arrow { color: var(--a6); }
+
+  /* single link card */
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background .2s, transform .15s;
+    border: 1px solid var(--line2);
+    color: var(--text);
+    background: var(--bg3);
+  }
+  .card-link:hover { transform: translateX(4px); }
+  .c6 .card-link:hover { border-color: rgba(249,115,22,0.35); color: var(--a6); }
+
+  /* ── COUNT BADGE ── */
+  .count {
+    font-size: 11px;
+    color: var(--dim);
+    margin-top: 16px;
+    font-family: 'DM Sans', monospace;
+    letter-spacing: .5px;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 28px 40px;
+    border-top: 1px solid var(--line);
+    font-size: 12px;
+    color: var(--dim);
+    letter-spacing: .5px;
+  }
+
+  /* ── STAGGER REVEAL ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  header  { animation: fadeUp .6s ease both; }
+  .card   { animation: fadeUp .6s ease both; }
+  .card:nth-child(1) { animation-delay: .1s; }
+  .card:nth-child(2) { animation-delay: .2s; }
+  .card:nth-child(3) { animation-delay: .3s; }
 </style>
-
 </head>
-
 <body>
 
+<canvas id="bg-canvas"></canvas>
+
 <header>
-    <h1>COMPUTACION GRAFICA</h1>
-    <p>Animaciones con Canvas y 3D</p>
+  <div class="header-eyebrow">Universidad &mdash; 2025</div>
+  <h1>Computación <em>Gráfica</em></h1>
+  <p>Animaciones con Canvas · Transformaciones 2D · Superficies 3D</p>
 </header>
 
-<div class="contenedor">
+<main>
 
-    <div class="card">
-        <div class="icon">📘</div>
+  <!-- ACTIVIDAD 4 -->
+  <div class="card c4">
+    <div class="card-head">
+      <div class="card-icon">📘</div>
+      <div class="card-title">
         <h2>Actividad 4</h2>
-        <p>Ejercicios básicos con gráficos dinámicos.</p>
-
-        <div class="subcards">
-            <div class="subcard">
-                <p>Gráfico de Barras</p>
-                <a href="barras.html">Abrir</a>
-            </div>
-
-            <div class="subcard">
-                <p>Puntos en Movimiento</p>
-                <a href="puntos.html">Abrir</a>
-            </div>
-             <div class="subcard">
-                <p>Curva Coseno</p>
-                <a href="coseno.html">Abrir</a>
-            </div>
-        </div>
+        <span class="card-badge">Canvas 2D</span>
+      </div>
     </div>
+    <p class="card-desc">Ejercicios básicos con gráficos dinámicos: barras animadas, puntos en movimiento y funciones trigonométricas.</p>
+    <div class="subcards">
+      <a class="subcard" href="barras.html">
+        <div class="subcard-left">
+          <div class="subcard-dot"></div>
+          <span class="subcard-name">Gráfico de Barras</span>
+        </div>
+        <span class="subcard-arrow">→</span>
+      </a>
+      <a class="subcard" href="puntos.html">
+        <div class="subcard-left">
+          <div class="subcard-dot"></div>
+          <span class="subcard-name">Puntos en Movimiento</span>
+        </div>
+        <span class="subcard-arrow">→</span>
+      </a>
+      <a class="subcard" href="coseno.html">
+        <div class="subcard-left">
+          <div class="subcard-dot"></div>
+          <span class="subcard-name">Curva Coseno</span>
+        </div>
+        <span class="subcard-arrow">→</span>
+      </a>
+    </div>
+    <p class="count">3 ejercicios</p>
+  </div>
 
-    <div class="card">
-        <div class="icon">📗</div>
+  <!-- ACTIVIDAD 5 -->
+  <div class="card c5">
+    <div class="card-head">
+      <div class="card-icon">📗</div>
+      <div class="card-title">
         <h2>Actividad 5</h2>
-        <p>Funciones matemáticas animadas.</p>
-        <div class="subcards">
-
-            <div class="subcard">
-                <p>traslacion
-                <a href="traslacion.html">Abrir</a>
-            </div>
-            
-            <div class="subcard">
-                <p>rotacion
-                <a href="rotacion.html">Abrir</a>
-            </div>
-            
-            <div class="subcard">
-                <p> interactivo </p>
-                <a href="interactivo.html">Abrir</a>
-            </div>
+        <span class="card-badge">Transformaciones</span>
+      </div>
+    </div>
+    <p class="card-desc">Transformaciones geométricas animadas: traslación, rotación e interacción con el usuario en tiempo real.</p>
+    <div class="subcards">
+      <a class="subcard" href="traslacion.html">
+        <div class="subcard-left">
+          <div class="subcard-dot"></div>
+          <span class="subcard-name">Traslación</span>
         </div>
+        <span class="subcard-arrow">→</span>
+      </a>
+      <a class="subcard" href="rotacion.html">
+        <div class="subcard-left">
+          <div class="subcard-dot"></div>
+          <span class="subcard-name">Rotación</span>
+        </div>
+        <span class="subcard-arrow">→</span>
+      </a>
+      <a class="subcard" href="interactivo.html">
+        <div class="subcard-left">
+          <div class="subcard-dot"></div>
+          <span class="subcard-name">Interactivo</span>
+        </div>
+        <span class="subcard-arrow">→</span>
+      </a>
     </div>
+    <p class="count">3 ejercicios</p>
+  </div>
 
-    <!--  ACTIVIDAD 3 -->
-    <div class="card">
-        <div class="icon">🧊</div>
-        <h2>Actividad 3</h2>
-        <p>Traslación 3D</p>
-        <a href="traslacion.html">Abrir</a>
+  <!-- ACTIVIDAD 6 — INVESTIGACIÓN -->
+  <div class="card c6">
+    <div class="card-head">
+      <div class="card-icon">🧊</div>
+      <div class="card-title">
+        <h2>Actividad 6</h2>
+        <span class="card-badge">Investigación</span>
+      </div>
     </div>
+    <p class="card-desc">Monografía interactiva sobre curvas paramétricas (Bézier, NURBS, B-Spline) y mallas poligonales con demos 3D.</p>
+    <div class="subcards" style="margin-bottom:16px;">
+      <div class="subcard" style="cursor:default;pointer-events:none;opacity:.7;">
+        <div class="subcard-left">
+          <div class="subcard-dot"></div>
+          <span class="subcard-name">Curvas Paramétricas</span>
+        </div>
+      </div>
+      <div class="subcard" style="cursor:default;pointer-events:none;opacity:.7;">
+        <div class="subcard-left">
+          <div class="subcard-dot"></div>
+          <span class="subcard-name">Mallas Poligonales</span>
+        </div>
+      </div>
+    </div>
+    <a class="card-link" href="grafica_computacional.html">
+      Abrir monografía →
+    </a>
+  </div>
 
+</main>
 
-
-</div>
+<footer>Computación Gráfica &mdash; Todos los derechos reservados</footer>
 
 <script src="jss/script.js"></script>
+<script>
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
 
+function resize() {
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+function init() {
+  particles = Array.from({ length: 55 }, () => ({
+    x: Math.random() * W,
+    y: Math.random() * H,
+    r: Math.random() * 1.4 + 0.3,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    a: Math.random() * 0.6 + 0.2
+  }));
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  for (const p of particles) {
+    p.x = (p.x + p.vx + W) % W;
+    p.y = (p.y + p.vy + H) % H;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(79,142,247,${p.a})`;
+    ctx.fill();
+  }
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const d = Math.sqrt(dx * dx + dy * dy);
+      if (d < 120) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(79,142,247,${0.12 * (1 - d / 120)})`;
+        ctx.lineWidth = 0.6;
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(draw);
+}
+
+window.addEventListener('resize', () => { resize(); init(); });
+resize();
+init();
+draw();
+</script>
 </body>
 </html>
